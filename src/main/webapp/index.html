@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+           <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+                <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+            
+    </head>
+    <body onload="onload()">
+    <script>
+        function onload()
+        {
+            console.log("onload");
+            setInterval(function (){
+                 var x = new XMLHttpRequest();
+                x.open("get", "Lab1?state="+new Date().getDate(), true);
+                x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                x.onreadystatechange = function () {
+                      	if (this.readyState === 4 && this.status === 200) {
+                       $("#tt").html(this.responseText);
+                    }
+                };
+                x.send();
+            },5000)
+            window.location.replace("Day2/ListView.html");
+            
+        }
+        function getAnswer()
+        {
+            console.log("get");
+           var x = new XMLHttpRequest();
+                x.open("get", "theWord.txt?state="+new Date().getDate(), true);
+                x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                x.onreadystatechange = function () {
+                      	if (this.readyState === 4 && this.status === 200) {
+                       $("#message").val(this.responseText);
+                    }
+                };
+                x.send();
+        }
+        function validate()
+        {
+           console.log($("#thename").val());
+           var x = new XMLHttpRequest();
+                x.open("get", "Lab1?"+"state="+new Date().getDate()+"&Name="+$("#thename").val(), true);
+                x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                x.onreadystatechange = function () {
+                      	if (this.readyState === 4 && this.status === 200) {
+                            console.log(this.responseText);
+                       $("#valid").text(this.responseText);
+                    }
+                };
+                x.send(null);
+        }
+         function login()
+        {
+           console.log($("#thename").val());
+           console.log($("#password").val());
+           var x = new XMLHttpRequest();
+                x.open("post", "Lab1", true);
+                x.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                x.onreadystatechange = function () {
+                      	if (this.readyState === 4 && this.status === 200) {
+                            console.log(this.responseText);
+                       $("#tt").text(this.responseText);
+                    }
+                };
+                x.send("state="+new Date().getDate()+"&Name="+$("#thename").val()+"&pass="+$("password").val());
+        }
+    </script>
+    
+        <div>
+            <input type="button" value="GetMessage" onclick="getAnswer()"/>
+            <input type="text" id="message"/>
+        </div><br><br>
+
+        <div >
+            Name: 
+            <input type="text" id="thename" onblur="validate()"/><label id ="valid"></label><br><br>
+            PassWord: 
+            <input type="text" id="password"/><br>
+            <input type="button" value="AuthWithServer" onclick="login()" /><label id ="validsigm"></label>
+        </div>
+        <br><br>
+        <div id="tt">
+            
+
+        </div>
+    </body>
+</html>
